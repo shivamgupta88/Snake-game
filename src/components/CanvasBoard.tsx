@@ -99,7 +99,7 @@ const CanvasBoard = ({ height, width }: ICanvasBoard) => {
     dispatch(resetGame());
     dispatch(scoreUpdates(RESET_SCORE));
     clearBoard(context);
-    drawObject(context, snake1, "#91C483");
+    drawObject(context, snake1, "#2E9032");
     drawObject(
       context,
       [generateRandomPosition(width - 20, height - 20)],
@@ -127,8 +127,11 @@ const CanvasBoard = ({ height, width }: ICanvasBoard) => {
     //Draw on canvas each time
     setContext(canvasRef.current && canvasRef.current.getContext("2d"));
     clearBoard(context);
-    drawObject(context, snake1, "#91C483");
-    drawObject(context, [pos], "#676FA3"); //Draws object randomly
+    // drawObject(context, snake1, "#91C483");
+    drawObject(context, snake1, "#2E9032");
+
+    // drawObject(context, [pos], "#676FA3"); //Draws object randomly
+    drawObject(context, [pos], "#F61616"); //Draws object randomly
 
     //When the object is consumed
     if (snake1[0].x === pos?.x && snake1[0].y === pos?.y) {
@@ -156,18 +159,55 @@ const CanvasBoard = ({ height, width }: ICanvasBoard) => {
     };
   }, [disallowedDirection, handleKeyEvents]);
 
+  const handleButtonClick = (direction: string) => {
+    switch (direction) {
+      case "UP":
+        moveSnake(0, -20, disallowedDirection);
+        break;
+      case "DOWN":
+        moveSnake(0, 20, disallowedDirection);
+        break;
+      case "LEFT":
+        moveSnake(-20, 0, disallowedDirection);
+        break;
+      case "RIGHT":
+        moveSnake(20, 0, disallowedDirection);
+        break;
+    }
+  };
+
+
   return (
-    <>
+    <div style={{ overflowX: "scroll", width: "100%" }}>
       <canvas
         ref={canvasRef}
         style={{
           border: `3px solid ${gameEnded ? "red" : "black"}`,
+          display: "block",
+          maxWidth: "100%",
+          height: "auto"
         }}
         width={width}
         height={height}
       />
       <Instruction resetBoard={resetBoard} />
-    </>
+      <div className="bg-red-300 text-center">
+        <div>
+          <button onClick={() => handleButtonClick("UP")}>Up</button>
+        </div>
+        <div className="flex justify-between" >
+        <div >
+          <button onClick={() => handleButtonClick("LEFT")}>Left</button>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick("RIGHT")}>Right</button>
+        </div>
+        </div>
+        <div>
+          <button onClick={() => handleButtonClick("DOWN")}>Down</button>
+        </div>
+      </div>
+    </div>
   );
 };
 
